@@ -27,10 +27,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '11'
-        distribution: 'adopt'
-        server-id: docker.io
-        server-username: DOCKER_USERNAME
-        server-password: DOCKER_PASSWORD      
+        distribution: 'adopt'   
     - name: Building User service
       run: mvn package -f user-service/pom.xml
     - name: Log in to Docker Hub
