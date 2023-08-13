@@ -12,6 +12,10 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
+  GKE_CLUSTER: cluster-springboot
+  GKE_ZONE: us-central1-c
 
 jobs:
   Build-and-Push-to-dockerhub:
@@ -56,6 +60,21 @@ jobs:
       env:
          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  Deploy:
+    needs: Build-and-Push-to-dockerhub
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: kubectl - Google Cloud GKE cluster.
+      uses: ameydev/gke-kubectl-action@master
+      env:
+        PROJECT_ID: ${{ env.PROJECT_ID }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GKE_SA_KEY }}
+        CLUSTER_NAME: ${{ env.GKE_CLUSTER }}
+        ZONE_NAME: ${{ env.GKE_ZONE }}
+      with:
+        args: apply -f k8s/
 
 
          
