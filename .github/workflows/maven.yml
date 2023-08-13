@@ -15,9 +15,7 @@ on:
 
 jobs:
   Build-and-Push-to-dockerhub:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -26,50 +24,39 @@ jobs:
         java-version: '11'
         server-id: docker.io
         server-username: DOCKER_USERNAME
-        server-password: DOCKER_PASSWORD
-      
-        
+        server-password: DOCKER_PASSWORD      
     - name: Building and pushing User service
       run: mvn package dockerfile:push --file user-service/pom.xml
       env:
          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
     - name: Building and pushing Department service
       run: mvn package dockerfile:push --file department-service/pom.xml
       env:
          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
     - name: Building and pushing Cloud config server service
       run: mvn package dockerfile:push --file cloud-config-server/pom.xml
       env:
          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
     - name: Building and pushing Cloud gateway
       run: mvn package dockerfile:push --file cloud-gateway/pom.xml
       env:
          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
     - name: Building and pushing Hystrix Dashboard
       run: mvn package dockerfile:push --file hystrix-dashboard/pom.xml
       env:
          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
     - name: Building and pushing Service Registry 
       run: mvn package dockerfile:push --file service-registry/pom.xml
       env:
          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-    Deploy:
-       runs-on: ubuntu-latest
-       need: Build-and-Push-to-dockerhub
-       steps:
-         
+
          
 
     
